@@ -32,13 +32,6 @@ class Counter extends Component {
           -
         </button>
         {' '}
-        <button onClick={this.incrementIfOdd}>
-          Increment if odd
-        </button>
-        {' '}
-        <button onClick={this.incrementAsync}>
-          Increment async
-        </button>
       </p>
     )
   }
