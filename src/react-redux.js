@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from './redux';
 // connect负责链接组件，给到redux里的数据放到组件的属性里
 // 1、负责接受一个组件，把state里的一些数据放进去，返回一个组件
@@ -10,7 +11,7 @@ import { bindActionCreators } from './redux';
 //     }
 //   }
 // }
-export connect = (mapStateToProps = state => state, mapDispatchToProps={}) => (WrapComponent) => {
+export const connect = (mapStateToProps = state => state, mapDispatchToProps={}) => (WrapComponent) => {
   return class ConectComponent extends React.Component {
     static contextTypes = {
       store: PropTypes.object
@@ -27,6 +28,7 @@ export connect = (mapStateToProps = state => state, mapDispatchToProps={}) => (W
       this.update();
     }
     update() {
+      const { store } = this.context;
       // 获取mapStateToProps和mapDispatchToProps放入this.props
       const stateProps = mapStateToProps(store.getState());
       // 方法不能直接给，因为需要dispatch,用dispatch将actionCreator包裹

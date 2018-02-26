@@ -2,41 +2,41 @@ export function createStore(reducer, enhancer) {
   if (enhancer) {
     return enhancer(createStore)(reducer);
   }
-  let currentState = {}
-  let currentListeners = []
+  let currentState;
+  let currentListeners = [];
 
   function getState() {
-    return currentState
+    return currentState;
   }
   function subscribe(listener) {
-    currentListeners.push(listener)
+    currentListeners.push(listener);
   }
   function dispatch(action) {
-    currentState = reducer(currentState, action)
-    currentListeners.forEach(v => v())
-    return action
+    currentState = reducer(currentState, action);
+    currentListeners.forEach(v => v());
+    return action;
   }
 
-  dispatch({type: '@@REDUX/INIT'}) //初始化
+  dispatch({type: '@@REDUX/INIT'}); //初始化
   return { getState, subscribe, dispatch }
 }
 
-export function applyMiddleware(middleware) {
-  return createStore => (...args) => {
-    const store = createStore(...args);
-    let dispatch = store.dispatch;
-
-    const midApi = {
-      getState: store.getState(),
-      dispatch: (...args) => dispatch(...args)
-    }
-    dispatch = middleware(midApi)(store.dispatch)
-    return {
-      ...store,
-      dispatch
-    }
-  }
-}
+// export function applyMiddleware(middleware) {
+//   return createStore => (...args) => {
+//     const store = createStore(...args);
+//     let dispatch = store.dispatch;
+//
+//     const midApi = {
+//       getState: store.getState(),
+//       dispatch: (...args) => dispatch(...args)
+//     }
+//     dispatch = middleware(midApi)(store.dispatch)
+//     return {
+//       ...store,
+//       dispatch
+//     }
+//   }
+// }
 
 //多个中间件合并
 

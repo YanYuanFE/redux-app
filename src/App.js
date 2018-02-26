@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import Counter from './components/Counter';
 import Footer from './components/Footer';
 import AddTodo from './containers/AddTodo';
 import VisibleTodoList from './containers/VisibleTodoList';
@@ -7,6 +8,7 @@ import './App.css';
 
 class App extends Component {
   render() {
+    // const { store } = this.props;
 
     return (
       <div className="App">
