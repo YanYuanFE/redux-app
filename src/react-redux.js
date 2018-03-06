@@ -16,6 +16,7 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
     static contextTypes = {
       store: PropTypes.object
     }
+
     constructor(props, context) {
       super(props, context);
       this.state = {
@@ -49,15 +50,15 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
 }
 
 export class Provider extends React.Component {
-  static childContextType = {
+  static childContextTypes = {
     store: PropTypes.object
   }
   getChildContext() {
     return {store: this.store}
   }
   constructor(props, context) {
-    super(props, context)
-    this.store = props.store
+    super(props, context);
+    this.store = props.store;
   }
   render() {
     return this.props.children
