@@ -58,9 +58,9 @@ export function applyMiddleware(...middlewares) {
     }
   }
 }
-
-//compose(fn1, fn2, fn3)
-//fn1(fn2(fn3)))
+//
+// compose(fn1, fn2, fn3)
+// fn1(fn2(fn3)))
 
 function compose(...funcs) {
   if (funcs.length === 0) {

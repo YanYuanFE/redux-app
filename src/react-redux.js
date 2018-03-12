@@ -65,11 +65,11 @@ export class Provider extends React.Component {
   }
 }
 
-const add = (num) => num + 3
-
-const addTwo = (x) => (y) => x + y + 3
-//两层箭头函数
-
-function sayHello(...args) {
-  console.log(args); //数组
-}
+// const add = (num) => num + 3
+//
+// const addTwo = (x) => (y) => x + y + 3
+// //两层箭头函数
+//
+// function sayHello(...args) {
+//   console.log(args); //数组
+// }

@@ -19,7 +19,7 @@ class Counter extends Component {
   }
 
   render() {
-    const { value, onIncrement, onDecrement } = this.props;
+    const { value, onIncrement, onDecrement, incrementAsync, addTwice } = this.props;
     console.log(this.props);
     return (
       <p>
@@ -33,6 +33,13 @@ class Counter extends Component {
           -
         </button>
         {' '}
+        <button onClick={incrementAsync}>
+          Increment async
+        </button>
+        {' '}
+        <button onClick={addTwice}>
+          +2
+        </button>
       </p>
     )
   }
@@ -41,7 +48,9 @@ class Counter extends Component {
 Counter.propTypes = {
   value: PropTypes.number.isRequired,
   onIncrement: PropTypes.func.isRequired,
-  onDecrement: PropTypes.func.isRequired
+  onDecrement: PropTypes.func.isRequired,
+  incrementAsync: PropTypes.func.isRequired,
+  addTwice: PropTypes.func.isRequired,
 };
 
 export default Counter;
