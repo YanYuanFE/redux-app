@@ -6,7 +6,7 @@ import './App.css';
 
 class App extends Component {
   render() {
-    const { onIncrement, onDecrement, counter, incrementAsync } = this.props;
+    const { onIncrement, onDecrement, counter, incrementAsync, addTwice } = this.props;
     console.log('render');
 
     return (
@@ -23,6 +23,7 @@ class App extends Component {
           onIncrement={onIncrement}
           onDecrement={onDecrement}
           incrementAsync={incrementAsync}
+          addTwice={addTwice}
         />
       </div>
     );
@@ -49,10 +50,15 @@ function incrementAsync() {
   }
 }
 
+function addTwice() {
+  return [{ type: 'INCREMENT' }, { type: 'INCREMENT' }]
+}
+
 const mapDispatchToProps = {
   onIncrement,
   onDecrement,
   incrementAsync,
+  addTwice
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -21,7 +21,8 @@ export function createStore(reducer, enhancer) {
   return { getState, subscribe, dispatch }
 }
 
-export function applyMiddleware(middleware) {
+//多个中间件合并
+export function applyMiddleware(...middlewares) {
   return createStore => (...args) => {
     const store = createStore(...args);
     let dispatch = store.dispatch;
@@ -30,13 +31,28 @@ export function applyMiddleware(middleware) {
       getState: store.getState(),
       dispatch: (...args) => dispatch(...args)
     }
-    dispatch = middleware(midApi)(store.dispatch)
+    const middlewareChain = middlewares.map(middleware => middleware(midApi));
+    dispatch = compose(...middlewareChain)(store.dispatch);
     return {
       ...store,
       dispatch
     }
   }
 }
+
+// compose(fn1, fn2, fn3)
+// fn1(fn2(fn3)))
+
+function compose(...funcs) {
+  if (funcs.length === 0) {
+    return arg => arg;
+  }
+  if (funcs.length === 1) {
+    return funcs[0]
+  }
+  return funcs.reduce((ret, item) => (...args) => ret(item(...args)))
+}
+
 
 
 function bindActionCreator(creator, dispatch) {
