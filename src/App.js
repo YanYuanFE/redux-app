@@ -6,7 +6,7 @@ import './App.css';
 
 class App extends Component {
   render() {
-    const { onIncrement, onDecrement, counter } = this.props;
+    const { onIncrement, onDecrement, counter, incrementAsync } = this.props;
     console.log('render');
 
     return (
@@ -22,6 +22,7 @@ class App extends Component {
           value={counter}
           onIncrement={onIncrement}
           onDecrement={onDecrement}
+          incrementAsync={incrementAsync}
         />
       </div>
     );
@@ -40,9 +41,18 @@ function onDecrement() {
   return { type: 'DECREMENT' }
 }
 
+function incrementAsync() {
+  return (dispatch, getState) => {
+    setTimeout(() => {
+      dispatch(onIncrement());
+    }, 2000)
+  }
+}
+
 const mapDispatchToProps = {
   onIncrement,
   onDecrement,
+  incrementAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
