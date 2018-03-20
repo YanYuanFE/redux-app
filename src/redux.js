@@ -1,7 +1,4 @@
-export function createStore(reducer, enhancer) {
-  if (enhancer) {
-    return enhancer(createStore)(reducer);
-  }
+export function createStore(reducer) {
   let currentState;
   let currentListeners = [];
 
@@ -21,56 +18,6 @@ export function createStore(reducer, enhancer) {
   return { getState, subscribe, dispatch }
 }
 
-// export function applyMiddleware(middleware) {
-//   return createStore => (...args) => {
-//     const store = createStore(...args);
-//     let dispatch = store.dispatch;
-//
-//     const midApi = {
-//       getState: store.getState(),
-//       dispatch: (...args) => dispatch(...args)
-//     }
-//     dispatch = middleware(midApi)(store.dispatch)
-//     return {
-//       ...store,
-//       dispatch
-//     }
-//   }
-// }
-
-//多个中间件合并
-
-export function applyMiddleware(...middlewares) {
-  return createStore => (...args) => {
-    const store = createStore(...args);
-    let dispatch = store.dispatch;
-
-    const midApi = {
-      getState: store.getState(),
-      dispatch: (...args) => dispatch(...args)
-    }
-    const middlewareChain = middlewares.map(middleware => middleware(midApi));
-    dispatch = compose(...middlewareChain)(store.dispatch);
-    // dispatch = middleware(midApi)(store.dispatch)
-    return {
-      ...store,
-      dispatch
-    }
-  }
-}
-//
-// compose(fn1, fn2, fn3)
-// fn1(fn2(fn3)))
-
-function compose(...funcs) {
-  if (funcs.length === 0) {
-    return arg => arg;
-  }
-  if (funcs.length === 1) {
-    return funcs[0]
-  }
-  return funcs.reduce((ret, item) => (...args) => ret(item(...args)))
-}
 
 function bindActionCreator(creator, dispatch) {
   //透传
@@ -87,30 +34,4 @@ export function bindActionCreators(creators, dispatch) {
   // return Object.keys(creators).reduce((ret, item) => {
   //   ret[item] = bindActionCreator(creators[item], dispatch);
   // }, {})
-}
-
-export function combineReducers(reducers) {
-  const reducerKeys = Object.keys(reducers);
-  let finalReducers = {};
-
-  reducerKeys.forEach((key) => {
-    finalReducers[key] = reducers[key];
-  });
-
-  const finalReducerKeys = Object.keys(finalReducers);
-
-  return (state = {}, action) => {
-    let hasChangeed = false;
-    let nextState = {};
-    finalReducerKeys.forEach((key) => {
-      const reducer = finalReducers[key];
-      const prevStateForKey = state[key];
-      const nextStateForKey = reducer(prevStateForKey, action);
-      nextState[key] = nextStateForKey;
-      hasChangeed = hasChangeed || nextStateForKey !== prevStateForKey;
-    })
-
-    return hasChangeed ? nextState : state;
-  }
-
 }
