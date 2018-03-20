@@ -3,6 +3,7 @@ import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
 
 const getVisibleTodos = (todos, filter) => {
+  console.log(todos);
   switch (filter) {
     case 'SHOW_ALL':
       return todos

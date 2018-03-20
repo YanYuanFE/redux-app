@@ -88,3 +88,29 @@ export function bindActionCreators(creators, dispatch) {
   //   ret[item] = bindActionCreator(creators[item], dispatch);
   // }, {})
 }
+
+export function combineReducers(reducers) {
+  const reducerKeys = Object.keys(reducers);
+  let finalReducers = {};
+
+  reducerKeys.forEach((key) => {
+    finalReducers[key] = reducers[key];
+  });
+
+  const finalReducerKeys = Object.keys(finalReducers);
+
+  return (state = {}, action) => {
+    let hasChangeed = false;
+    let nextState = {};
+    finalReducerKeys.forEach((key) => {
+      const reducer = finalReducers[key];
+      const prevStateForKey = state[key];
+      const nextStateForKey = reducer(prevStateForKey, action);
+      nextState[key] = nextStateForKey;
+      hasChangeed = hasChangeed || nextStateForKey !== prevStateForKey;
+    })
+
+    return hasChangeed ? nextState : state;
+  }
+
+}
