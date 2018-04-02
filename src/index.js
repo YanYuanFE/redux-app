@@ -7,11 +7,10 @@ import './index.css';
 import App from './App';
 import { applyMiddleware, createStore } from './redux';
 import registerServiceWorker from './registerServiceWorker';
-// import reducer from './reducers';
-import counter from './reducers';
+import reducer from './reducers';
 // console.log(reducer);
 
-const store = createStore(counter, applyMiddleware(thunk, arrThunk));
+const store = createStore(reducer, applyMiddleware(thunk, arrThunk));
 
 console.log(store.getState());
 

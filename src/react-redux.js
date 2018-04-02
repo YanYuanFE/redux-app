@@ -31,7 +31,7 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
     update() {
       const { store } = this.context;
       // 获取mapStateToProps和mapDispatchToProps放入this.props
-      const stateProps = mapStateToProps(store.getState());
+      const stateProps = mapStateToProps(store.getState(), this.props);
       // 方法不能直接给，因为需要dispatch,用dispatch将actionCreator包裹
       const dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
 
@@ -44,6 +44,7 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
       })
     }
     render() {
+      console.log(this.state.props);
       return <WrapComponent {...this.state.props}/>
     }
   }

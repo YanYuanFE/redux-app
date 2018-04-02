@@ -78,6 +78,7 @@ function bindActionCreator(creator, dispatch) {
 }
 
 export function bindActionCreators(creators, dispatch) {
+  console.log(creators);
   let bound = {};
   Object.keys(creators).forEach(v => {
     let creator = creators[v];
