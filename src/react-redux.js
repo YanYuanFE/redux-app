@@ -11,7 +11,7 @@ import { bindActionCreators } from './redux';
 //     }
 //   }
 // }
-export const connect = (mapStateToProps = state => state, mapDispatchToProps={}) => (WrapComponent) => {
+export const connect = (mapStateToProps = state => state, mapDispatchToProps) => (WrapComponent) => {
   return class ConectComponent extends React.Component {
     static contextTypes = {
       store: PropTypes.object
@@ -33,6 +33,9 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
       // 获取mapStateToProps和mapDispatchToProps放入this.props
       const stateProps = mapStateToProps(store.getState(), this.props);
       // 方法不能直接给，因为需要dispatch,用dispatch将actionCreator包裹
+      if (!mapDispatchToProps) {
+        mapDispatchToProps = {dispatch: store.dispatch}
+      }
       const dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
 
       this.setState({
@@ -40,11 +43,12 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
           ...this.state.props,//注意顺序，覆盖初始state
           ...stateProps,
           ...dispatchProps,
+          ...this.props,
         }
       })
     }
     render() {
-      console.log(this.state.props);
+      console.log(this.props);
       return <WrapComponent {...this.state.props}/>
     }
   }
