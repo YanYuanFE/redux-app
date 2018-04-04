@@ -23,7 +23,7 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps) =>
         props: {}
       }
     }
-    componentDidMount() {
+    componentWillMount() {
       const { store } = this.context;
       store.subscribe(() => this.update());//每次dispatch数据变化时更新state
       this.update();
@@ -34,9 +34,16 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps) =>
       const stateProps = mapStateToProps(store.getState(), this.props);
       // 方法不能直接给，因为需要dispatch,用dispatch将actionCreator包裹
       if (!mapDispatchToProps) {
-        mapDispatchToProps = {dispatch: store.dispatch}
+        mapDispatchToProps = (dispatch) => ({dispatch})
       }
-      const dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+      let dispatchProps;
+      if (typeof mapDispatchToProps === 'function') {
+          dispatchProps = mapDispatchToProps(store.dispatch, this.props);
+      } else {
+          dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+      }
+      // const  dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+      // console.log(mapDispatchToProps, dispatchProps);
 
       this.setState({
         props: {
@@ -48,11 +55,11 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps) =>
       })
     }
     render() {
-      console.log(this.props);
       return <WrapComponent {...this.state.props}/>
     }
   }
 }
+
 
 export class Provider extends React.Component {
   static childContextTypes = {
