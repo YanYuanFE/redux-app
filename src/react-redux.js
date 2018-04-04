@@ -11,7 +11,7 @@ import { bindActionCreators } from './redux';
 //     }
 //   }
 // }
-export const connect = (mapStateToProps = state => state, mapDispatchToProps={}) => (WrapComponent) => {
+export const connect = (mapStateToProps = state => state, mapDispatchToProps) => (WrapComponent) => {
   return class ConectComponent extends React.Component {
     static contextTypes = {
       store: PropTypes.object
@@ -23,23 +23,37 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
         props: {}
       }
     }
-    componentDidMount() {
+
+    componentWillMount() {
       const { store } = this.context;
       store.subscribe(() => this.update());//每次dispatch数据变化时更新state
       this.update();
     }
+
     update() {
       const { store } = this.context;
       // 获取mapStateToProps和mapDispatchToProps放入this.props
-      const stateProps = mapStateToProps(store.getState());
+      const stateProps = mapStateToProps(store.getState(), this.props);
       // 方法不能直接给，因为需要dispatch,用dispatch将actionCreator包裹
-      const dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+      if (!mapDispatchToProps) {
+        mapDispatchToProps = (dispatch) => ({dispatch})
+        //   mapDispatchToProps = { dispatch: store.dispatch}
+      }
+      let dispatchProps;
+      if (typeof mapDispatchToProps === 'function') {
+          dispatchProps = mapDispatchToProps(store.dispatch, this.props);
+      } else {
+          dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+      }
+      // const  dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
+      // console.log(mapDispatchToProps, dispatchProps);
 
       this.setState({
         props: {
           ...this.state.props,//注意顺序，覆盖初始state
           ...stateProps,
           ...dispatchProps,
+          ...this.props,
         }
       })
     }
