@@ -3,7 +3,10 @@ const thunk = ({dispatch, getState}) => next => action => {
   if (typeof action === 'function') {
     return action(dispatch, getState);
   }
-  return next(action)
+  console.log(next);
+  console.log(dispatch);
+  return next(action);
+  // typeof action === 'function' ? action(dispatch, getState) : next(action)
 }
 
 export default thunk;

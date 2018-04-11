@@ -43,14 +43,19 @@ export function createStore(reducer, enhancer) {
 export function applyMiddleware(...middlewares) {
   return createStore => (...args) => {
     const store = createStore(...args);
+    console.log(store.dispatch);
     let dispatch = store.dispatch;
 
     const midApi = {
-      getState: store.getState(),
+      getState: store.getState,
       dispatch: (...args) => dispatch(...args)
     }
     const middlewareChain = middlewares.map(middleware => middleware(midApi));
+    // debugger;
+    console.log(middlewareChain);
     dispatch = compose(...middlewareChain)(store.dispatch);
+    console.log(store.dispatch);
+    console.info(dispatch);
     // dispatch = middleware(midApi)(store.dispatch)
     return {
       ...store,
@@ -58,9 +63,29 @@ export function applyMiddleware(...middlewares) {
     }
   }
 }
+// (...args) => logger(thunk(arrThunk(args)))
+// logger(thunk(arrThunk(store.dispatch)))
 //
 // compose(fn1, fn2, fn3)
 // fn1(fn2(fn3)))
+
+// const a = (next) => {
+//   console.log(1);
+//   return next();
+//   console.log('1 after');
+// }
+// const b = (next) => {
+//   console.log(2);
+//   return next();
+//   console.log('2 after');
+// }
+// const c = (next) => {
+//   console.log(3);
+//   return next();
+// }
+// const func = (...args) => a(b(c(...args)))
+
+// func(() => console.log('start'))
 
 function compose(...funcs) {
   if (funcs.length === 0) {
@@ -69,8 +94,20 @@ function compose(...funcs) {
   if (funcs.length === 1) {
     return funcs[0]
   }
-  return funcs.reduce((ret, item) => (...args) => ret(item(...args)))
+  return funcs.reduce((ret, item, index) => {
+    console.log('ret', index, ret);
+    console.log('item', index, item);
+    return (...args) => ret(item(...args))
+  })
 }
+
+// logger(thunk())
+
+// export default function compose(...funcs) {
+//   return funcs.reduceRight((composed, f) => f(composed));
+// }
+
+
 
 function bindActionCreator(creator, dispatch) {
   //透传
