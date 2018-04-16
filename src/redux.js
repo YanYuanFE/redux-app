@@ -69,23 +69,29 @@ export function applyMiddleware(...middlewares) {
 // compose(fn1, fn2, fn3)
 // fn1(fn2(fn3)))
 
-// const a = (next) => {
+// const a = (next) => (action) => {
 //   console.log(1);
-//   return next();
+//   let result = next(action);
 //   console.log('1 after');
+//   return result;
 // }
-// const b = (next) => {
+// const b = (next) => (action) =>{
 //   console.log(2);
-//   return next();
+//   let result = next(action);
 //   console.log('2 after');
+//   return result;
 // }
-// const c = (next) => {
+// const c = (next) => (action) =>{
 //   console.log(3);
-//   return next();
+//   let result = next(action);
+//   console.log('3 after');
+//   return result;
 // }
 // const func = (...args) => a(b(c(...args)))
 
-// func(() => console.log('start'))
+// const dispatch = func((log) => console.log(log))
+
+// dispatch('abc');
 
 function compose(...funcs) {
   if (funcs.length === 0) {
