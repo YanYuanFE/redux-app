@@ -97,34 +97,27 @@ export function bindActionCreators(creators, dispatch) {
 }
 
 export function combineReducers(reducers) {
-  // let finalReducers = {};
-  //
-  // Object.keys(reducers).forEach((key) => {
-  //   finalReducers[key] = reducers[key];
-  // });
+    const reducerKeys = Object.keys(reducers);
+    let finalReducers = {};
 
-  const finalReducerKeys = Object.keys(reducers);
+    reducerKeys.forEach((key) => {
+        finalReducers[key] = reducers[key];
+    });
 
-  return (state = {}, action) => {
-    // let nextState = {};
-    // finalReducerKeys.forEach((key) => {
-    //   const reducer = reducers[key];
-    //   const prevStateForKey = state[key];
-    //   const nextStateForKey = reducer(prevStateForKey, action);
-    //   nextState[key] = nextStateForKey;
-    // });
-    //
-    // return nextState;
+    const finalReducerKeys = Object.keys(finalReducers);
 
-    return finalReducerKeys.reduce((ret, item) => {
-       ret[item] = reducers[item](state[item], action);
-       return ret;
-    }, {});
-  }
+    return (state = {}, action) => {
+        let hasChangeed = false;
+        let nextState = {};
+        finalReducerKeys.forEach((key) => {
+            const reducer = finalReducers[key];
+            const prevStateForKey = state[key];
+            const nextStateForKey = reducer(prevStateForKey, action);
+            nextState[key] = nextStateForKey;
+            hasChangeed = hasChangeed || nextStateForKey !== prevStateForKey;
+        })
+
+        return hasChangeed ? nextState : state;
+    }
 
 }
-
-// ['todos', 'count'].reduce((ret, item) => {
-//   ret[item] = item;
-//   return ret;
-// }, {})
