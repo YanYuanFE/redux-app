@@ -14,6 +14,7 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
         props: {}
       }
     }
+
     componentDidMount() {
       const { store } = this.context;
       store.subscribe(() => this.update());//每次dispatch数据变化时更新state
@@ -23,7 +24,7 @@ export const connect = (mapStateToProps = state => state, mapDispatchToProps={})
       const { store } = this.context;
       // 获取mapStateToProps和mapDispatchToProps放入this.props
       const stateProps = mapStateToProps(store.getState());
-      // 方法不能直接给，因为需要dispatch,用dispatch将actionCreator包裹
+      // 方法不能直接传递，因为需要dispatch,用dispatch将actionCreator包裹
       const dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
 
       this.setState({
@@ -44,13 +45,16 @@ export class Provider extends React.Component {
   static childContextTypes = {
     store: PropTypes.object
   }
+
   getChildContext() {
     return {store: this.store}
   }
+
   constructor(props, context) {
     super(props, context);
     this.store = props.store;
   }
+
   render() {
     return this.props.children
   }

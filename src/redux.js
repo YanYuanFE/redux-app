@@ -25,13 +25,14 @@ function bindActionCreator(creator, dispatch) {
 }
 
 export function bindActionCreators(creators, dispatch) {
-  let bound = {};
-  Object.keys(creators).forEach(v => {
-    let creator = creators[v];
-    bound[v] = bindActionCreator(creator, dispatch);
-  })
-  return bound;
-  // return Object.keys(creators).reduce((ret, item) => {
-  //   ret[item] = bindActionCreator(creators[item], dispatch);
-  // }, {})
+  // let bound = {};
+  // Object.keys(creators).forEach(v => {
+  //   let creator = creators[v];
+  //   bound[v] = bindActionCreator(creator, dispatch);
+  // })
+  // return bound;
+  return Object.keys(creators).reduce((ret, item) => {
+    ret[item] = bindActionCreator(creators[item], dispatch);
+    return ret;
+  }, {})
 }

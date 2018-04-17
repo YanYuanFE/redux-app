@@ -7,7 +7,6 @@ import './App.css';
 class App extends Component {
   render() {
     const { onIncrement, onDecrement, counter } = this.props;
-    console.log('render');
 
     return (
       <div className="App">
